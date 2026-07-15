@@ -68,6 +68,7 @@ npx shadcn@latest add [컴포넌트명]
 │  │  ├─ ui/               # shadcn/ui 컴포넌트
 │  │  ├─ theme-provider.tsx  # 테마 컨텍스트 프로바이더
 │  │  ├─ theme-toggle.tsx    # 테마 전환 버튼
+│  │  ├─ mobile-nav.tsx      # 모바일 햄버거 메뉴(시트)
 │  │  ├─ site-header.tsx     # 상단 네비게이션 바
 │  │  └─ site-footer.tsx     # 하단 푸터
 │  └─ lib/

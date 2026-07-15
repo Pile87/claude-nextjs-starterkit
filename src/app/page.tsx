@@ -3,7 +3,6 @@ import { Palette, Rocket, ShieldCheck, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -38,14 +37,15 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-6xl px-4">
+    <div className="container-page">
       {/* Hero 섹션 */}
-      <section className="flex flex-col items-center gap-6 py-20 text-center sm:py-28">
+      <section className="flex flex-col items-center gap-6 py-16 text-center sm:py-28">
         <div className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm text-muted-foreground">
           <Rocket className="h-4 w-4" />
           웹 개발을 빠르게 시작하세요
         </div>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+        {/* 375px~880px 구간에서 sm 브레이크포인트 점프 없이 연속적으로 스케일된다 */}
+        <h1 className="text-[clamp(2.25rem,1rem+5vw,3.75rem)] font-bold leading-[1.1] tracking-tight">
           Next.js Starter Kit
         </h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
@@ -84,7 +84,6 @@ export default function Home() {
               <CardTitle className="mt-2">{feature.title}</CardTitle>
               <CardDescription>{feature.description}</CardDescription>
             </CardHeader>
-            <CardContent />
           </Card>
         ))}
       </section>

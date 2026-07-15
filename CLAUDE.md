@@ -42,12 +42,12 @@ Next.js 16(App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 + sh
 - 설정은 `components.json`: style `radix-nova`, baseColor `neutral`, `rsc: true`, `cssVariables: true`, 아이콘 라이브러리 `lucide`.
 - `src/components/ui/`의 파일은 벤더 코드가 아니라 **프로젝트 소유 코드**다. 직접 수정해도 되며, 수정 시 해당 컴포넌트 재추가(`add`)로 덮어써지지 않도록 주의한다.
 - 새 컴포넌트 추가: `npx shadcn@latest add <컴포넌트명>` (예: `npx shadcn@latest add dialog table tabs`). 직접 손으로 작성하지 말고 CLI를 사용한다.
-- 현재 포함: button, card, dropdown-menu, input, label, sonner.
+- 현재 포함: button, card, dropdown-menu, input, label, sheet, sonner.
 
 ### 레이아웃 및 규칙
 
 - `src/app/layout.tsx`가 전역 셸을 정의한다: `ThemeProvider > SiteHeader + main + SiteFooter + Toaster(sonner)`. 페이지는 `main` 내부만 채우므로 헤더/푸터를 페이지에서 다시 렌더링하지 않는다.
-- App Router 기본값은 서버 컴포넌트다. 훅·이벤트 핸들러가 필요할 때만 `"use client"`를 붙인다 (현재 `theme-provider`, `theme-toggle`이 해당).
+- App Router 기본값은 서버 컴포넌트다. 훅·이벤트 핸들러가 필요할 때만 `"use client"`를 붙인다 (현재 `theme-provider`, `theme-toggle`, `mobile-nav`가 해당).
 - 경로 별칭: `@/*` → `./src/*` (예: `@/components/ui/button`, `@/lib/utils`).
 - 클래스명 결합은 항상 `src/lib/utils.ts`의 `cn()` (clsx + tailwind-merge)을 사용한다.
 - 토스트는 sonner를 쓴다. `Toaster`는 루트 레이아웃에 이미 마운트되어 있으므로 `toast()` 호출만 하면 된다.

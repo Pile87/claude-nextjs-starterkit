@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -123,8 +123,52 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* 터치 시 파란/회색 하이라이트 제거 (focus-visible 포커스 링은 그대로 유지) */
+    -webkit-tap-highlight-color: transparent;
   }
   html {
     @apply font-sans;
+    /* 가로 회전 시 브라우저가 폰트 크기를 임의로 확대하는 것을 방지 */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
+/* ===== 모바일 유틸리티 (viewport-fit=cover 대응) ===== */
+
+/* 노치·홈 인디케이터 safe-area 패딩 */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+@utility pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 공통 페이지 컨테이너. landscape에서 노치가 있으면 좌우 패딩이 safe-area만큼 자동 확장된다. */
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-6xl);
+  padding-inline-start: max(--spacing(4), env(safe-area-inset-left));
+  padding-inline-end: max(--spacing(4), env(safe-area-inset-right));
+}
+
+/* 시각적 크기는 유지한 채 터치 히트 영역만 최소 44x44px 확보 (Apple HIG) */
+@utility tap-target {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
   }
 }
