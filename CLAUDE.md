@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Next.js 16(App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui 기반의 웹 개발 스타터킷. 기능 코드는 거의 없고, 새 프로젝트가 바로 기능 개발에 착수할 수 있도록 테마·레이아웃·UI 컴포넌트 기반만 갖춰져 있다.
 
+**이 문서의 범위**: 여기에는 *모든 파생 프로젝트에 공통으로 참인 규칙*만 둔다. 컴포넌트 배치 구조, 다국어, 콘텐츠 관리, 상태 관리, 외부 임베드 등 프로젝트마다 달라지는 규칙은 이 파일이 아니라 해당 프로젝트의 CLAUDE.md에 추가한다. 이 파일이 100줄을 넘길 것 같으면 먼저 "이게 정말 모든 프로젝트에 필요한가"를 사용자에게 확인한다.
+
 ## 명령어
 
 | 명령어 | 설명 |
@@ -16,7 +18,7 @@ Next.js 16(App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 + sh
 | `npm run lint` | ESLint 검사 |
 | `npx tsc --noEmit` | 타입 검사만 단독 수행 |
 
-- **테스트 프레임워크가 설정되어 있지 않다.** 테스트 러너, 테스트 파일, 관련 의존성이 모두 없으므로 "단일 테스트 실행" 명령도 존재하지 않는다. 검증은 `npm run lint` + `npx tsc --noEmit` + `npm run build`로 한다. 테스트가 필요해지면 러너부터 도입해야 한다.
+- **테스트 러너 유무는 문서를 믿지 말고 `package.json`의 `scripts`와 `devDependencies`를 직접 확인해 판단한다.** 스타터킷 초기 상태에는 테스트 러너·테스트 파일·관련 의존성이 없으므로 "단일 테스트 실행" 명령도 존재하지 않는다. 러너가 없는 동안 검증은 `npm run lint` + `npx tsc --noEmit` + `npm run build`로 한다. 테스트가 필요해지면 러너부터 도입해야 하며, 이는 프로젝트 단위의 결정이므로 사용자에게 먼저 확인한다.
 - 최초 셋업 시 `cp .env.example .env.local` 후 값을 채운다.
 
 ## 아키텍처
@@ -36,23 +38,29 @@ Next.js 16(App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 + sh
 - `@import "tailwindcss"`, `"tw-animate-css"`, `"shadcn/tailwind.css"`
 - `@theme inline { ... }` 블록이 CSS 변수(`--background`, `--primary`, `--chart-*`, `--sidebar-*` 등)를 Tailwind 유틸리티 토큰에 매핑한다.
 - 색상·폰트 토큰을 추가/변경하려면 JS 설정이 아니라 `globals.css`의 CSS 변수를 편집한다.
+- **브랜드 스타일 적용은 `ui/` 원본 수정이 아니라 여기서 먼저 시도한다.** CSS 변수 교체만으로 해결되는 경우가 대부분이다.
 
 ### shadcn/ui
 
 - 설정은 `components.json`: style `radix-nova`, baseColor `neutral`, `rsc: true`, `cssVariables: true`, 아이콘 라이브러리 `lucide`.
-- `src/components/ui/`의 파일은 벤더 코드가 아니라 **프로젝트 소유 코드**다. 직접 수정해도 되며, 수정 시 해당 컴포넌트 재추가(`add`)로 덮어써지지 않도록 주의한다.
+- `src/components/ui/`의 파일은 벤더 코드가 아니라 **프로젝트 소유 코드**다. 직접 수정해도 된다.
+- 다만 `npx shadcn@latest add <이름>`은 기존 파일을 **경고 없이 덮어쓴다.** 이미 존재하는 컴포넌트를 재추가할 때는 (1) 사용자에게 먼저 알리고, (2) 작업 트리가 clean한 상태에서 실행하고, (3) 실행 후 `git diff`로 기존 수정분이 사라지지 않았는지 확인한다.
+- `ui/` 원본을 수정할 때는 `globals.css` CSS 변수 / `className` / 기존 `variant` / 래퍼 컴포넌트로 해결이 안 되는 이유를 한 줄로 먼저 설명하고 진행한다. 설명 없이 원본을 고치지 않는다.
+- 원본 수정은 가능한 한 기존 스타일을 지우는 대신 `cva` variant를 **추가**하는 형태로 한다. 재추가 시 `git diff` 검토가 쉬워진다.
 - 새 컴포넌트 추가: `npx shadcn@latest add <컴포넌트명>` (예: `npx shadcn@latest add dialog table tabs`). 직접 손으로 작성하지 말고 CLI를 사용한다.
-- 현재 포함: button, card, dropdown-menu, input, label, sheet, sonner.
+- **설치된 컴포넌트 목록은 이 문서에 적지 않는다.** 필요하면 `src/components/ui/` 폴더를 직접 확인한다.
 
 ### 레이아웃 및 규칙
 
 - `src/app/layout.tsx`가 전역 셸을 정의한다: `ThemeProvider > SiteHeader + main + SiteFooter + Toaster(sonner)`. 페이지는 `main` 내부만 채우므로 헤더/푸터를 페이지에서 다시 렌더링하지 않는다.
-- App Router 기본값은 서버 컴포넌트다. 훅·이벤트 핸들러가 필요할 때만 `"use client"`를 붙인다 (현재 `theme-provider`, `theme-toggle`, `mobile-nav`가 해당).
+- App Router 기본값은 서버 컴포넌트다. 훅·이벤트 핸들러가 필요할 때만 `"use client"`를 붙인다 (예: `theme-provider`, `theme-toggle`, `mobile-nav`). `"use client"`는 필요한 최말단 컴포넌트에만 붙이고 상위로 올리지 않는다.
 - 경로 별칭: `@/*` → `./src/*` (예: `@/components/ui/button`, `@/lib/utils`).
 - 클래스명 결합은 항상 `src/lib/utils.ts`의 `cn()` (clsx + tailwind-merge)을 사용한다.
 - 토스트는 sonner를 쓴다. `Toaster`는 루트 레이아웃에 이미 마운트되어 있으므로 `toast()` 호출만 하면 된다.
 - 폰트는 `layout.tsx`의 `next/font` (Geist Sans/Mono) → CSS 변수 `--font-geist-sans`, `--font-geist-mono`로 노출된다.
+- 파일명은 kebab-case, 컴포넌트명은 PascalCase (`site-header.tsx` → `SiteHeader`).
 
 ## 주의사항
 
 - `.env*` 파일은 권한 설정상 읽기가 차단되어 있다 (`~/.claude/settings.json`의 deny 규칙). 환경변수 내용이 필요하면 사용자에게 요청한다.
+- 이 저장소는 스타터킷이다. 파생 프로젝트 전용 규칙을 여기에 추가하지 않는다.
