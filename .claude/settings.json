@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); echo \"$input\" | jq -e '.stop_hook_active == true' >/dev/null && exit 0; cd \"${CLAUDE_PROJECT_DIR:-.}\"; git status --porcelain 2>/dev/null | grep -qE '\\.(ts|tsx|js|jsx|mjs|cjs|css)$' || exit 0; printf '%s' '{\"decision\":\"block\",\"reason\":\"이번 턴에서 변경된 소스 코드가 있습니다. Task 도구로 code-reviewer 서브에이전트(subagent_type: code-reviewer)를 호출해 방금 변경분(git diff)의 품질·보안·성능을 리뷰하세요. 이미 이번 사이클에서 리뷰를 마쳤다면 반복하지 마세요.\"}'",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
