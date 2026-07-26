@@ -18,6 +18,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // OG 이미지·상대경로 메타데이터의 기준 URL. 배포 시 NEXT_PUBLIC_APP_URL 만 바꾸면 된다.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  ),
   title: "Next.js Starter Kit",
   description:
     "Next.js, TypeScript, Tailwind CSS, shadcn/ui로 구성된 웹 개발 스타터킷",

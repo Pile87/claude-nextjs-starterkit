@@ -43,6 +43,7 @@ npm run dev
 | `npm run build` | 프로덕션 빌드 |
 | `npm run start` | 프로덕션 서버 실행 |
 | `npm run lint` | ESLint 검사 |
+| `npm run typecheck` | TypeScript 타입 검사 (`tsc --noEmit`) |
 
 ## shadcn/ui 컴포넌트 추가
 
