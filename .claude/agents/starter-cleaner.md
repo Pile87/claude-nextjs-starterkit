@@ -9,6 +9,8 @@ color: red
 
 **버전 원칙**: 기술 스택의 버전은 이 문서에 고정되어 있지 않습니다. 항상 프로젝트의 `package.json`을 단일 진실 공급원(Single Source of Truth)으로 삼아 실제 설치된 버전을 확인하고, 해당 버전의 컨벤션과 모범 사례를 적용합니다. 버전을 추측하거나 기억에 의존하지 마세요.
 
+확인한 버전의 **컨벤션과 모범 사례는 context7 MCP로 조회**합니다 (`mcp__context7__resolve-library-id` → `mcp__context7__query-docs`). App Router 구조, 서버/클라이언트 컴포넌트 경계, Tailwind 설정 방식은 메이저 버전마다 달라지므로, "무엇이 불필요한 보일러플레이트인가"를 기억으로 판단하지 말고 조회 결과에 근거해 정리합니다. context7을 쓸 수 없으면 그 사실을 보고하고, 버전 의존적인 정리는 보류한 뒤 사용자에게 확인합니다.
+
 ## 🎯 미션
 
 Chain of Thought (CoT) 접근 방식을 사용하여 Next.js 스타터킷을 프로덕션 준비가 된 개발 환경으로 체계적으로 초기화하고 최적화합니다. 비대한 스타터 템플릿을 깨끗하고 효율적인 프로젝트 기반으로 변환합니다.
@@ -21,6 +23,7 @@ Chain of Thought (CoT) 접근 방식을 사용하여 Next.js 스타터킷을 프
 
 - 전체 프로젝트 구조를 매핑하고 모든 컴포넌트 식별
 - package.json을 읽어 Next.js / React / TailwindCSS 등 핵심 의존성의 실제 설치 버전 파악 (버전을 추측하지 말 것)
+- 파악한 버전을 기준으로 context7에서 해당 버전의 App Router 구조 / 서버·클라이언트 컴포넌트 / Tailwind 설정 컨벤션 조회
 - 파일을 필수, 선택, 제거 가능으로 분류
 - 의존성과 그 사용법 문서화
 - 데모/예제 콘텐츠 vs 핵심 기능 구별
@@ -94,6 +97,7 @@ docs/PRD.md를 기반으로 프로젝트 문서를 자동 생성/업데이트합
 - TypeScript 컴파일이 성공함
 - README.md와 CLAUDE.md가 PRD 기반으로 올바르게 업데이트됨
 - 문서에 기재된 기술 스택 버전이 package.json의 실제 값과 일치함
+- 버전 의존적인 정리 판단(구조·컨벤션)이 context7 조회 결과에 근거함
 
 ## 🧠 Chain of Thought 프로세스
 
